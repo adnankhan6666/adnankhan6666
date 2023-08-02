@@ -1,0 +1,87 @@
+import random
+
+class QuizGame:
+    def __init__(self, questions):
+        self.questions = questions
+        self.score = 0
+    
+    def welcome_message(self):
+        print("Welcome to the Quiz Game!")
+        print("Answer multiple-choice or fill-in-the-blank questions on a specific topic.")
+        print("Let's get started!\n")
+    
+    def load_questions(self):
+        # Load your quiz questions here
+        pass
+    
+    def present_question(self, question, choices):
+        print(question)
+        for i, choice in enumerate(choices, start=1):
+            print(f"{i}. {choice}")
+        user_answer = input("Your answer: ")
+        return int(user_answer) - 1  # Adjust for 0-based index
+    
+    def evaluate_answer(self, user_answer, correct_answer):
+        if user_answer == correct_answer:
+            self.score += 1
+            print("Correct!\n")
+        else:
+            print("Incorrect!")
+            print(f"The correct answer is: {correct_answer + 1}. {self.questions[correct_answer]['choices'][correct_answer]}\n")
+    
+    def play(self):
+        self.welcome_message()
+        self.load_questions()
+        
+        random.shuffle(self.questions)
+        
+        for q_num, question_data in enumerate(self.questions, start=1):
+            question = question_data['question']
+            choices = question_data['choices']
+            correct_answer = question_data['answer']
+            
+            print(f"Question {q_num}:")
+            user_choice = self.present_question(question, choices)
+            self.evaluate_answer(user_choice, correct_answer)
+        
+        self.display_final_results()
+    
+    def display_final_results(self):
+        total_questions = len(self.questions)
+        print("Quiz Finished!")
+        print(f"You answered {self.score} out of {total_questions} questions correctly.")
+        if self.score == total_questions:
+            print("Congratulations! You got a perfect score!")
+        elif self.score >= total_questions * 0.7:
+            print("Great job! You did well.")
+        else:
+            print("Keep practicing. You can do better!")
+        
+        self.play_again()
+    
+    def play_again(self):
+        play_again = input("Do you want to play again? (yes/no): ").lower()
+        if play_again == "yes":
+            self.score = 0
+            self.play()
+        else:
+            print("Thanks for playing!")
+        
+if __name__ == "__main__":
+    questions = [
+        {
+            'question': "What is the capital of France?",
+            'choices': ["Paris", "Madrid", "Berlin", "Rome"],
+            'answer': 0
+        },
+        {
+            'question': "Which planet is known as the Red Planet?",
+            'choices': ["Venus", "Mars", "Jupiter", "Neptune"],
+            'answer': 1
+        },
+        # Add more questions here
+    ]
+    
+    game = QuizGame(questions)
+    game.play()
+
